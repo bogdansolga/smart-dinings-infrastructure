@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: smart-dinings-frontend-client
+  name: smart-dinings-client-menu
 spec:
   selector:
-    app: smart-dinings-frontend-client
+    app: smart-dinings-client-menu
   ports:
     - protocol: TCP
       port: 80

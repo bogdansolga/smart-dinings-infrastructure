@@ -1,20 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: argocd-ingress
-  namespace: argocd
+  name: smart-dinings-client-menu-ingress
+  namespace: smart-dinings
   annotations:
     spec.ingressClassName: traefik
 spec:
   rules:
-    - host: argocd.pre.smartdinings.com
+    - host: client-menu.pre.smartdinings.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: argocd-server
+                name: smart-dinings-client-menu
                 port:
                   number: 80
                 
