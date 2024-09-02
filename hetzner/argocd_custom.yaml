@@ -1,0 +1,9 @@
+# https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+## Argo Configs
+configs:
+  # Argo CD configuration parameters
+  ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml
+  params:
+    ## Server properties
+    # -- Run server without TLS
+    server.insecure: true

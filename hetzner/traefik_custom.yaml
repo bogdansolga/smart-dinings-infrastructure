@@ -1,0 +1,13 @@
+service:
+  enabled: true
+  ## -- Single service is using `MixedProtocolLBService` feature gate.
+  ## -- When set to false, it will create two Service, one for TCP and one for UDP.
+  single: true
+  type: LoadBalancer
+  # -- Additional annotations applied to both TCP and UDP services (e.g. for cloud provider specific config)
+  annotations:
+    load-balancer.hetzner.cloud/location: fsn1
+    load-balancer.hetzner.cloud/name: test-api
+    load-balancer.hetzner.cloud/use-private-ip: "true"
+    load-balancer.hetzner.cloud/hostname: k3s.pre.smartdinings.com
+    
