@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smart-dinings-admin
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: smart-dinings-admin
+  template:
+    metadata:
+      labels:
+        app: smart-dinings-admin
+    spec:
+      containers:
+      - name: smart-dinings-admin
+        image: bogdansolga/smart-dinings-admin:0.0.1-2024-09-02
+        ports:
+        - containerPort: 3000
+        env:
+        - name: BACKEND_URL
+          value: "http://smart-dinings-backend"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 300m
+            memory: 256Mi

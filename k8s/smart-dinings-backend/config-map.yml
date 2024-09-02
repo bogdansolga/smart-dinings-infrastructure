@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+   name: smart-dinings-config
+data:
+   DB_HOST: "smart-dinings-postgresql"
+   DB_PORT: "5432"
+   DB_NAME: "smartdinings"
+   REDIS_HOST: "smart-dinings-redis-master"
+   REDIS_PORT: "6379"
+   MILVUS_HOST: "smart-dinings-milvus-proxy"
+   MILVUS_PORT: "19530"

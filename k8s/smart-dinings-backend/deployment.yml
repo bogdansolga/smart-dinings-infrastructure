@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smart-dinings-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: smart-dinings-backend
+  template:
+    metadata:
+      labels:
+        app: smart-dinings-backend
+    spec:
+      containers:
+        - name: smart-dinings-backend
+          image: bogdansolga/smart-dinings-backend:0.0.1-SNAPSHOT-2024-09-02-147d22a
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://smart-dinings-postgres:5432/smartdinings
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+            - name: SPRING_REDIS_HOST
+              value: smart-dinings-redis-master
+            - name: SPRING_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: redis-password
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

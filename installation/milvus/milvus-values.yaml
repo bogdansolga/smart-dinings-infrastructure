@@ -1,0 +1,45 @@
+cluster:
+   enabled: true
+etcd:
+   replicaCount: 3
+   persistence:
+      storageClass: "longhorn"
+   resources:
+      requests:
+         memory: 256Mi
+         cpu: 250m
+      limits:
+         memory: 512Mi
+         cpu: 500m
+minio:
+   mode: distributed
+   persistence:
+      storageClass: "longhorn"
+      size: 10Gi
+   resources:
+      requests:
+         memory: 256Mi
+         cpu: 250m
+      limits:
+         memory: 512Mi
+         cpu: 500m
+pulsar:
+   persistence:
+      storageClass: "longhorn"
+      size: 10Gi
+   resources:
+      requests:
+         memory: 512Mi
+         cpu: 250m
+      limits:
+         memory: 1Gi
+         cpu: 500m
+proxy:
+   replicas: 2
+   resources:
+      requests:
+         memory: 256Mi
+         cpu: 250m
+      limits:
+         memory: 512Mi
+         cpu: 500m
