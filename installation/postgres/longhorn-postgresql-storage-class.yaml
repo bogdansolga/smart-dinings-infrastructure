@@ -1,0 +1,16 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: longhorn-postgresql-ha
+  namespace: smart-dinings-infrastructure
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+parameters:
+  numberOfReplicas: "3"
+  staleReplicaTimeout: "60"
+  dataLocality: "best-effort"
+  fsType: "ext4"
+  #diskSelector: "fast"
+  #nodeSelector: "fast"
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer

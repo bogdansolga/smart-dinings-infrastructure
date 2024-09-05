@@ -1,0 +1,41 @@
+global:
+  storageClass: "longhorn-postgresql-ha"
+  postgresql:
+    auth:
+      postgresPassword: "GWR1nDIv7cgfggr7wnpvQEnXbvKEsJQAeNDqcalxeBo="
+      replicationPassword: "LyJ+L2tU3eS/6eHq7twK5ifHM/saCx5/a8pSmXn4pKU="
+      database: "smart_dinings"
+      username: "smart_dinings_admin"
+      password: "sUDYgsb$z$LYkvL9M#N#X^i2!PbRPZYn"
+
+primary:
+  persistence:
+    size: 4Gi
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+
+readReplicas:
+  replicaCount: 2
+  persistence:
+    size: 4Gi
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+
+pgpool:
+  replicaCount: 2
+  adminPassword: "3jgkE+WGh2PQuagEY/36xgIls2SCiq0AOWZYLqUZ/ts="
+  customUsers:
+    usernames: "smart_dinings_admin"
+    passwords: "sUDYgsb$z$LYkvL9M#N#X^i2!PbRPZYn"
+metrics:
+  enabled: true

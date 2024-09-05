@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: image-cleaner
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: image-cleaner
+  template:
+    metadata:
+      labels:
+        name: image-cleaner
+    spec:
+      containers:
+        - name: cleaner
+          image: docker:stable
+          command:
+            - /bin/sh
+            - -c
+            - |
+              while true; do
+                docker image prune -a --force --filter "until=48h"
+                sleep 86400
+              done
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
