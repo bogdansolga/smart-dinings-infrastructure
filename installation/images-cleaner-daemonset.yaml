@@ -14,11 +14,12 @@ spec:
     spec:
       containers:
         - name: cleaner
-          image: docker.io/alpine:3.14
+          image: rancher/kubectl:v1.23.3
           command:
             - /bin/sh
             - -c
             - |
+              apk add --no-cache jq
               SOCKET_PATH="/run/k3s/containerd/containerd.sock"
               if [ ! -S $SOCKET_PATH ]; then
                 SOCKET_PATH="/run/containerd/containerd.sock"
@@ -26,7 +27,7 @@ spec:
               while true; do
                 echo "Cleaning images older than ${IMAGE_AGE_THRESHOLD}"
                 crictl -r unix://$SOCKET_PATH images --quiet | while read -r image; do
-                  created=$(crictl -r unix://$SOCKET_PATH inspecti $image | grep CreatedAt | awk '{print $2}' | tr -d '",')
+                  created=$(crictl -r unix://$SOCKET_PATH inspecti $image | jq -r '.status.createdAt')
                   created_seconds=$(date -d "$created" +%s)
                   now_seconds=$(date +%s)
                   age_seconds=$((now_seconds - created_seconds))
