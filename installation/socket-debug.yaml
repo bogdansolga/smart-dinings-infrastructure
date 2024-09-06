@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: socket-debug
+  namespace: kube-system
+spec:
+  containers:
+    - name: debug
+      image: alpine:3.14
+      command: ["/bin/sh", "-c", "sleep 3600"]
+      volumeMounts:
+        - name: root
+          mountPath: /host
+      securityContext:
+        privileged: true
+  volumes:
+    - name: root
+      hostPath:
+        path: /
+        type: Directory
+

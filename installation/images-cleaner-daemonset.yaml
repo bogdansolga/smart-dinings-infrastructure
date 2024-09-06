@@ -14,23 +14,50 @@ spec:
     spec:
       containers:
         - name: cleaner
-          image: docker:stable
+          image: docker.io/alpine:3.14
           command:
             - /bin/sh
             - -c
             - |
+              SOCKET_PATH="/run/k3s/containerd/containerd.sock"
+              if [ ! -S $SOCKET_PATH ]; then
+                SOCKET_PATH="/run/containerd/containerd.sock"
+              fi
               while true; do
-                docker image prune -a --force --filter "until=48h"
-                sleep 86400
+                echo "Cleaning images older than ${IMAGE_AGE_THRESHOLD}"
+                crictl -r unix://$SOCKET_PATH images --quiet | while read -r image; do
+                  created=$(crictl -r unix://$SOCKET_PATH inspecti $image | grep CreatedAt | awk '{print $2}' | tr -d '",')
+                  created_seconds=$(date -d "$created" +%s)
+                  now_seconds=$(date +%s)
+                  age_seconds=$((now_seconds - created_seconds))
+                  if [ $age_seconds -gt $((${IMAGE_AGE_THRESHOLD%d} * 86400)) ]; then
+                    echo "Removing image $image (age: $((age_seconds / 86400)) days)"
+                    crictl -r unix://$SOCKET_PATH rmi $image
+                  fi
+                done
+                sleep ${CLEAN_INTERVAL}
               done
+          env:
+            - name: IMAGE_AGE_THRESHOLD
+              value: "3d"
+            - name: CLEAN_INTERVAL
+              value: "86400"  # 24 hours in seconds
           volumeMounts:
-            - name: docker-sock
-              mountPath: /var/run/docker.sock
+            - name: containerd-sock
+              mountPath: /run/k3s/containerd
+            - name: containerd-sock-fallback
+              mountPath: /run/containerd
+          securityContext:
+            privileged: true
       volumes:
-        - name: docker-sock
+        - name: containerd-sock
           hostPath:
-            path: /var/run/docker.sock
-            type: Socket
+            path: /run/k3s/containerd
+            type: DirectoryOrCreate
+        - name: containerd-sock-fallback
+          hostPath:
+            path: /run/containerd
+            type: DirectoryOrCreate
       tolerations:
         - effect: NoSchedule
           operator: Exists
