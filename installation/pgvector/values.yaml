@@ -1,0 +1,21 @@
+replicaCount: 1
+
+image:
+  repository: pgvector/pgvector
+  tag: pg16
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5432
+
+persistence:
+  enabled: true
+  storageClass: "longhorn"
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+pgVector:
+  database: ai_query_hub
+  username: ai_query_hub_admin
+  password: 'sU5Ygsb$z$LYkvL9MxN^X#i2!PbRx2ZYn'

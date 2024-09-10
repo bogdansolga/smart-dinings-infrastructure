@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgvector-connection
+  namespace: ai-query-hub-infrastructure
+data:
+  DATABASE_URL: "postgresql://pgvector:your_password@pgvector.ai-query-hub-infrastructure.svc.cluster.local:5432/vectordb"
+  PGHOST: "pgvector.ai-query-hub-infrastructure.svc.cluster.local"
+  PGPORT: "5432"
+  PGDATABASE: "vectordb"
+  PGUSER: "pgvector"
